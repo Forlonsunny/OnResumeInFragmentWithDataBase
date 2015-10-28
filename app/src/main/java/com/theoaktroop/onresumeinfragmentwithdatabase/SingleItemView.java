@@ -1,8 +1,9 @@
-package com.theoaktroop.onresumeinfragmentwithdatabase.fragments;
+package com.theoaktroop.onresumeinfragmentwithdatabase;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.theoaktroop.onresumeinfragmentwithdatabase.AnswerTabel.AnswerModule;
@@ -24,6 +25,8 @@ public class SingleItemView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.singleitemview);
         editText1=(EditText)findViewById(R.id.etv);
+        editText1.setSingleLine();
+        editText1.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
 
     }
@@ -32,6 +35,6 @@ public class SingleItemView extends Activity {
         String answerTitle=editText1.getText().toString();
         mAnswerTableDataBaseQuery = new AnswerTableDataBaseQuery(this);
         mAnswerTableDataBaseQuery.createNewAnswer("1",answerTitle,"allAnswerJsonString","formattedDate","15 min", 10,"inputstartLatitudeLongitude","inputfinishLatitudeLongitude");
-        finish();
+
     }
 }

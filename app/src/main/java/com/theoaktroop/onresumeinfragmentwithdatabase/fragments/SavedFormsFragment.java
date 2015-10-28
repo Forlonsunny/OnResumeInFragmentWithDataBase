@@ -3,9 +3,9 @@ package com.theoaktroop.onresumeinfragmentwithdatabase.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +29,31 @@ public class SavedFormsFragment extends Fragment implements OnItemLongClickListe
     public static AnswerListAdapter mAdapter;
     private AnswerTableDataBaseQuery mAnswerTableDataBaseQuery;
     private Context context;
+    private View rootView;
     long ePID = 0;
 
     public SavedFormsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        context = getActivity();
+        mListView = (ListView) rootView.findViewById(R.id.listview_saved_form);
+        mAnswerTableDataBaseQuery = new AnswerTableDataBaseQuery(context);
+        // AnswerModule mAnswerModule1 = mAnswerTableDataBaseQuery.createNewAnswer(1,"This is a english full Answer","16.10.15","15 min", 10,"550","1015");
+
+        mAnswerModuleList = mAnswerTableDataBaseQuery.getAllAnswerSavedQuestion();
+
+            mAdapter = new AnswerListAdapter(context, mAnswerModuleList);
+            mAdapter.notifyDataSetChanged();
+        Log.d("bug","here");
+            mListView.setAdapter(mAdapter);
+
+
+        mListView.setOnItemLongClickListener(this);
+
+        super.onResume();
     }
 
     @Override
@@ -46,27 +67,7 @@ public class SavedFormsFragment extends Fragment implements OnItemLongClickListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_savedforms, container, false);
-
-
-        context = getActivity();
-        mListView = (ListView) rootView.findViewById(R.id.listview_saved_form);
-        mAnswerTableDataBaseQuery = new AnswerTableDataBaseQuery(context);
-        // AnswerModule mAnswerModule1 = mAnswerTableDataBaseQuery.createNewAnswer(1,"This is a english full Answer","16.10.15","15 min", 10,"550","1015");
-
-        mAnswerModuleList = mAnswerTableDataBaseQuery.getAllAnswerSavedQuestion();
-
-
-
-
-        if (mAnswerModuleList != null && !mAnswerModuleList.isEmpty()) {
-            mAdapter = new AnswerListAdapter(context, mAnswerModuleList);
-            mListView.setAdapter(mAdapter);
-        }
-
-        mListView.setOnItemLongClickListener(this);
-
-
+        rootView = inflater.inflate(R.layout.fragment_savedforms, container, false);
         return rootView;
 
     }
@@ -110,14 +111,9 @@ public class SavedFormsFragment extends Fragment implements OnItemLongClickListe
 
         mAnswerModuleList = mAnswerTableDataBaseQuery.getAllAnswerSavedQuestion();
 
+        mAdapter = new AnswerListAdapter(context, mAnswerModuleList);
+        mListView.setAdapter(mAdapter);
 
-
-
-        if (mAnswerModuleList != null && !mAnswerModuleList.isEmpty()) {
-            mAdapter = new AnswerListAdapter(context, mAnswerModuleList);
-            mListView.setAdapter(mAdapter);
-        }
-        else mListView.setVisibility(View.GONE);
     }
 
 
